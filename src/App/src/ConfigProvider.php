@@ -9,6 +9,8 @@ use App\Handler\CodeRequestFormPageHandler;
 use App\Handler\CodeRequestProcessingHandler;
 use App\Handler\CodeVerificationFormPageHandler;
 use Laminas\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory;
+use Mezzio\Application;
+use Mezzio\Container\ApplicationConfigInjectionDelegator;
 use Twilio\Rest\Client;
 
 /**
@@ -28,6 +30,7 @@ class ConfigProvider
     {
         return [
             'dependencies' => $this->getDependencies(),
+            'routes'       => $this->getRouteConfig(),
             'templates'    => $this->getTemplates(),
         ];
     }
@@ -48,6 +51,11 @@ class ConfigProvider
                 CodeVerificationFormPageHandler::class           => ReflectionBasedAbstractFactory::class,
                 Handler\CodeVerificationProcessingHandler::class => ReflectionBasedAbstractFactory::class,
             ],
+            'delegators' => [
+                Application::class => [
+                    ApplicationConfigInjectionDelegator::class,
+                ],
+            ],
         ];
     }
 
@@ -61,6 +69,36 @@ class ConfigProvider
                 'app'    => [__DIR__ . '/../templates/app'],
                 'error'  => [__DIR__ . '/../templates/error'],
                 'layout' => [__DIR__ . '/../templates/layout'],
+            ],
+        ];
+    }
+
+    public function getRouteConfig(): array
+    {
+        return [
+            [
+                'path'            => '/',
+                'middleware'      => CodeRequestFormPageHandler::class,
+                'allowed_methods' => ['GET'],
+                'name'            => 'code.request.form',
+            ],
+            [
+                'path'            => '/',
+                'middleware'      => CodeRequestProcessingHandler::class,
+                'allowed_methods' => ['POST'],
+                'name'            => 'code.request.processor',
+            ],
+            [
+                'path'            => '/verify',
+                'middleware'      => CodeVerificationFormPageHandler::class,
+                'allowed_methods' => ['GET'],
+                'name'            => 'code.verify.form',
+            ],
+            [
+                'path'            => '/verify',
+                'middleware'      => CodeRequestProcessingHandler::class,
+                'allowed_methods' => ['POST'],
+                'name'            => 'code.verify.processor',
             ],
         ];
     }

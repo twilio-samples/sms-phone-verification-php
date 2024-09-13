@@ -38,6 +38,5 @@ use Psr\Container\ContainerInterface;
  */
 
 return static function (Application $app, MiddlewareFactory $factory, ContainerInterface $container): void {
-    $app->get('/', App\Handler\CodeRequestFormPageHandler::class, 'code.request.form');
     $app->get('/api/ping', App\Handler\PingHandler::class, 'api.ping');
 };
