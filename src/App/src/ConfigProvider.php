@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App;
 
+use App\Factory\TwilioClientFactory;
 use Laminas\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory;
+use Twilio\Rest\Client;
 
 /**
  * The configuration provider for the App module
@@ -37,6 +39,7 @@ class ConfigProvider
                 Handler\PingHandler::class => Handler\PingHandler::class,
             ],
             'factories'  => [
+                Client::class                                    => TwilioClientFactory::class,
                 Handler\CodeRequestFormPageHandler::class        => ReflectionBasedAbstractFactory::class,
             ],
         ];
