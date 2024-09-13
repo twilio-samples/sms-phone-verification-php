@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace AppTest\Handler;
 
-use App\Handler\HomePageHandler;
-use App\Handler\HomePageHandlerFactory;
+use App\Handler\CodeRequestFormPageHandler;
+use App\Handler\CodeRequestFormPageHandlerFactory;
 use AppTest\InMemoryContainer;
 use Mezzio\Router\RouterInterface;
 use Mezzio\Template\TemplateRendererInterface;
@@ -18,10 +18,10 @@ class HomePageHandlerFactoryTest extends TestCase
         $container = new InMemoryContainer();
         $container->setService(RouterInterface::class, $this->createMock(RouterInterface::class));
 
-        $factory  = new HomePageHandlerFactory();
+        $factory  = new CodeRequestFormPageHandlerFactory();
         $homePage = $factory($container);
 
-        self::assertInstanceOf(HomePageHandler::class, $homePage);
+        self::assertInstanceOf(CodeRequestFormPageHandler::class, $homePage);
     }
 
     public function testFactoryWithTemplate(): void
@@ -30,9 +30,9 @@ class HomePageHandlerFactoryTest extends TestCase
         $container->setService(RouterInterface::class, $this->createMock(RouterInterface::class));
         $container->setService(TemplateRendererInterface::class, $this->createMock(TemplateRendererInterface::class));
 
-        $factory  = new HomePageHandlerFactory();
+        $factory  = new CodeRequestFormPageHandlerFactory();
         $homePage = $factory($container);
 
-        self::assertInstanceOf(HomePageHandler::class, $homePage);
+        self::assertInstanceOf(CodeRequestFormPageHandler::class, $homePage);
     }
 }

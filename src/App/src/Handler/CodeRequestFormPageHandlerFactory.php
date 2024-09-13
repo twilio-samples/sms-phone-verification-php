@@ -11,7 +11,7 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 use function assert;
 
-class HomePageHandlerFactory
+class CodeRequestFormPageHandlerFactory
 {
     public function __invoke(ContainerInterface $container): RequestHandlerInterface
     {
@@ -23,6 +23,6 @@ class HomePageHandlerFactory
             : null;
         assert($template instanceof TemplateRendererInterface || null === $template);
 
-        return new HomePageHandler($container::class, $router, $template);
+        return new CodeRequestFormPageHandler($container::class, $router, $template);
     }
 }
