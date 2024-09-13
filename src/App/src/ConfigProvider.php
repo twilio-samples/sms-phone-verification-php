@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App;
 
 use App\Factory\TwilioClientFactory;
+use App\Handler\CodeRequestFormPageHandler;
+use App\Handler\CodeRequestProcessingHandler;
+use App\Handler\CodeVerificationFormPageHandler;
 use Laminas\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory;
 use Twilio\Rest\Client;
 
@@ -40,7 +43,10 @@ class ConfigProvider
             ],
             'factories'  => [
                 Client::class                                    => TwilioClientFactory::class,
-                Handler\CodeRequestFormPageHandler::class        => ReflectionBasedAbstractFactory::class,
+                CodeRequestFormPageHandler::class                => ReflectionBasedAbstractFactory::class,
+                CodeRequestProcessingHandler::class              => ReflectionBasedAbstractFactory::class,
+                CodeVerificationFormPageHandler::class           => ReflectionBasedAbstractFactory::class,
+                Handler\CodeVerificationProcessingHandler::class => ReflectionBasedAbstractFactory::class,
             ],
         ];
     }
