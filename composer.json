@@ -55,6 +55,7 @@
         "laminas/laminas-stdlib": "^3.6",
         "mezzio/mezzio": "^3.7",
         "mezzio/mezzio-fastroute": "^3.11.0",
+        "mezzio/mezzio-flash": "^1.8",
         "mezzio/mezzio-helpers": "^5.7",
         "mezzio/mezzio-twigrenderer": "^2.15",
         "twilio/sdk": "^8.3",
