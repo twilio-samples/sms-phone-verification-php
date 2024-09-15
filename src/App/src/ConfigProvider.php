@@ -9,6 +9,8 @@ use App\Handler\CodeRequestFormPageHandler;
 use App\Handler\CodeRequestProcessingHandler;
 use App\Handler\CodeRequestProcessingHandlerFactory;
 use App\Handler\CodeVerificationFormPageHandler;
+use App\Handler\CodeVerificationProcessingHandler;
+use App\Handler\CodeVerificationProcessingHandlerFactory;
 use Laminas\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory;
 use Mezzio\Application;
 use Mezzio\Container\ApplicationConfigInjectionDelegator;
@@ -46,11 +48,11 @@ class ConfigProvider
                 Handler\PingHandler::class => Handler\PingHandler::class,
             ],
             'factories'  => [
-                Client::class                                    => TwilioClientFactory::class,
-                CodeRequestFormPageHandler::class                => ReflectionBasedAbstractFactory::class,
+                Client::class                            => TwilioClientFactory::class,
+                CodeRequestFormPageHandler::class        => ReflectionBasedAbstractFactory::class,
                 CodeRequestProcessingHandler::class      => CodeRequestProcessingHandlerFactory::class,
-                CodeVerificationFormPageHandler::class           => ReflectionBasedAbstractFactory::class,
-                Handler\CodeVerificationProcessingHandler::class => ReflectionBasedAbstractFactory::class,
+                CodeVerificationFormPageHandler::class   => ReflectionBasedAbstractFactory::class,
+                CodeVerificationProcessingHandler::class => CodeVerificationProcessingHandlerFactory::class,
             ],
             'delegators' => [
                 Application::class => [
@@ -97,7 +99,7 @@ class ConfigProvider
             ],
             [
                 'path'            => '/verify',
-                'middleware'      => CodeRequestProcessingHandler::class,
+                'middleware'      => CodeVerificationProcessingHandler::class,
                 'allowed_methods' => ['POST'],
                 'name'            => 'code.verify.processor',
             ],

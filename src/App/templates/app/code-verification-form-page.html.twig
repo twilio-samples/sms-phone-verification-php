@@ -10,14 +10,22 @@
     </div>
 
     <div class="row">
-        <form action="/"
+        {% if successMessage is defined %}
+        <div class="mx-auto max-w-lg border-2 border-emerald-700 rounded-md py-4 px-8 mb-3 text-center bg-emerald-700 text-white font-medium drop-shadow-md">
+            Verification check succeeded.
+        </div>
+        {% endif %}
+        <form action="/verify"
               method="post"
               class="bg-white mx-auto max-w-lg border-2 border-slate-100 rounded-md py-6 px-8 grid grid-cols-1 gap-3 drop-shadow-sm focus:shadow-inner pb-8">
             <div class="my-2">
                 <label for="code" class="block mb-2 font-medium text-gray-500">Verification code:</label>
-                <input type="text" id="code" name="code" value="" class="w-full border-slate-200 rounded-md p-2 pl-3 border-2">
+                <input type="text" id="code" name="code" value="" class="w-full border-slate-200 rounded-md p-2 pl-3 border-2" required>
             </div>
-            <input type="submit" name="submit" value="Request Verification Code" class="border-2 bg-indigo-600 text-white font-medium rounded-md p-3 py-2 mt-0">
+            <input type="submit"
+                   name="submit"
+                   value="Validate Verification Code"
+                   class="border-2 bg-indigo-600 text-white font-medium rounded-md p-3 py-2 hover:cursor-pointer hover:bg-indigo-700">
         </form>
     </div>
 {% endblock %}
