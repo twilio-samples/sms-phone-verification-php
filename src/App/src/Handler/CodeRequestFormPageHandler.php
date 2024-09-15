@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Handler;
 
 use Laminas\Diactoros\Response\HtmlResponse;
+use Mezzio\Flash\FlashMessageMiddleware;
+use Mezzio\Flash\FlashMessagesInterface;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -18,8 +20,16 @@ readonly final class CodeRequestFormPageHandler implements RequestHandlerInterfa
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $data = [];
+        /** @var ?FlashMessagesInterface $flashMessages */
+        $flashMessages = $request->getAttribute(FlashMessageMiddleware::FLASH_ATTRIBUTE, null);
 
-        return new HtmlResponse($this->template->render('app::code-request-form-page', $data));
+        /** @var array $formData */
+        $formData = $flashMessages?->getFlash('form-data') ?? [];
+        return new HtmlResponse(
+            $this->template->render('app::code-request-form-page', [
+                'error'     => $flashMessages?->getFlash('form-error') ?? "",
+                'form_data' => $formData,
+            ])
+        );
     }
 }
