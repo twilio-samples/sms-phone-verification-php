@@ -7,6 +7,7 @@ namespace App;
 use App\Factory\TwilioClientFactory;
 use App\Handler\CodeRequestFormPageHandler;
 use App\Handler\CodeRequestProcessingHandler;
+use App\Handler\CodeRequestProcessingHandlerFactory;
 use App\Handler\CodeVerificationFormPageHandler;
 use Laminas\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory;
 use Mezzio\Application;
@@ -47,7 +48,7 @@ class ConfigProvider
             'factories'  => [
                 Client::class                                    => TwilioClientFactory::class,
                 CodeRequestFormPageHandler::class                => ReflectionBasedAbstractFactory::class,
-                CodeRequestProcessingHandler::class              => ReflectionBasedAbstractFactory::class,
+                CodeRequestProcessingHandler::class      => CodeRequestProcessingHandlerFactory::class,
                 CodeVerificationFormPageHandler::class           => ReflectionBasedAbstractFactory::class,
                 Handler\CodeVerificationProcessingHandler::class => ReflectionBasedAbstractFactory::class,
             ],
