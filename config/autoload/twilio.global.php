@@ -11,7 +11,8 @@ declare(strict_types=1);
 
 return [
     'twilio' => [
-        'account_sid' => $_ENV['TWILIO_ACCOUNT_SID'],
-        'auth_token'  => $_ENV['TWILIO_AUTH_TOKEN'],
+        'account_sid'      => $_ENV['TWILIO_ACCOUNT_SID'],
+        'auth_token'       => $_ENV['TWILIO_AUTH_TOKEN'],
+        'verification_sid' => $_ENV['TWILIO_VERIFICATION_SID'],
     ],
 ];
