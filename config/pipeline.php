@@ -42,6 +42,8 @@ return function (Application $app, MiddlewareFactory $factory, ContainerInterfac
     // - $app->pipe('/api', $apiMiddleware);
     // - $app->pipe('/docs', $apiDocMiddleware);
     // - $app->pipe('/files', $filesMiddleware);
+    $app->pipe(\Mezzio\Session\SessionMiddleware::class);
+    $app->pipe(\Mezzio\Flash\FlashMessageMiddleware::class);
 
     // Register the routing middleware in the middleware pipeline.
     // This middleware registers the Mezzio\Router\RouteResult request attribute.
