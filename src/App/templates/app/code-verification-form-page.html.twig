@@ -15,6 +15,11 @@
             Verification check succeeded.
         </div>
         {% endif %}
+        {% if form_error is defined and not form_error is empty %}
+            <div class="mx-auto max-w-lg border-2 border-rose-700 rounded-md py-4 px-8 mb-3 text-center bg-rose-700 text-white font-medium drop-shadow-md">
+                {{ form_error }}
+            </div>
+        {% endif %}
         <form action="/verify"
               method="post"
               class="bg-white mx-auto max-w-lg border-2 border-slate-100 rounded-md py-6 px-8 grid grid-cols-1 gap-3 drop-shadow-sm focus:shadow-inner pb-8">

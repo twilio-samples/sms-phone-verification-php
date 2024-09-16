@@ -36,7 +36,7 @@ class CodeVerificationFormPageHandler implements RequestHandlerInterface
         $formError = $flashMessages?->getFlash('form-error');
 
         if ($formError !== null) {
-            $data['formError'] = $formError;
+            $data['form_error'] = $formError;
         }
 
         return new HtmlResponse($this->template->render('app::code-verification-form-page', $data));

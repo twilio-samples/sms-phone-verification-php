@@ -63,6 +63,8 @@ readonly final class CodeVerificationProcessingHandler implements RequestHandler
                 ]);
             if ($verificationCheck->status === "approved") {
                 $flashMessages?->flash("message-success", "Verification check succeeded.");
+            } else {
+                $flashMessages?->flash("form-error", "Verification check failed. Reason: {$verificationCheck->status}");
             }
         } catch (TwilioException $e) {
             $flashMessages?->flash("form-error", "Verification check failed. Reason: {$e->getMessage()}");
