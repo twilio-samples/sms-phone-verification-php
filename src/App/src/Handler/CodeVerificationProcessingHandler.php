@@ -12,6 +12,8 @@ use Laminas\InputFilter\InputFilter;
 use Laminas\Validator\NotEmpty;
 use Mezzio\Flash\FlashMessageMiddleware;
 use Mezzio\Flash\FlashMessagesInterface;
+use Mezzio\Session\SessionInterface;
+use Mezzio\Session\SessionMiddleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -39,6 +41,13 @@ readonly final class CodeVerificationProcessingHandler implements RequestHandler
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        /** @var SessionInterface $session */
+        $session = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE, null);
+        if (! $session instanceof SessionInterface || $session->get("phone-number", null) === null) {
+            // The phone number needs to be set in session for this handler to work
+            return new RedirectResponse("/");
+        }
+
         /** @var ?FlashMessagesInterface $flashMessages */
         $flashMessages = $request->getAttribute(FlashMessageMiddleware::FLASH_ATTRIBUTE, null);
 
@@ -49,7 +58,7 @@ readonly final class CodeVerificationProcessingHandler implements RequestHandler
         }
 
         /** @var string $phoneNumber */
-        $phoneNumber = $flashMessages?->getFlash('phone-number') ?? "";
+        $phoneNumber = $session->get("phone-number", null) ?? "";
 
         try {
             $verificationCheck = $this->client
@@ -63,6 +72,7 @@ readonly final class CodeVerificationProcessingHandler implements RequestHandler
                 ]);
             if ($verificationCheck->status === "approved") {
                 $flashMessages?->flash("message-success", "Verification check succeeded.");
+                $session->clear();
             } else {
                 $flashMessages?->flash("form-error", "Verification check failed. Reason: {$verificationCheck->status}");
             }

@@ -14,6 +14,8 @@ use Laminas\Validator\Regex;
 use Laminas\Validator\StringLength;
 use Mezzio\Flash\FlashMessageMiddleware;
 use Mezzio\Flash\FlashMessagesInterface;
+use Mezzio\Session\SessionInterface;
+use Mezzio\Session\SessionMiddleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
@@ -75,7 +77,11 @@ readonly final class CodeRequestProcessingHandler implements RequestHandlerInter
                     ->services($this->verificationSid)
                     ->verifications
                     ->create($phoneNumber, "sms");
-                $flashMessages?->flash("phone-number", $phoneNumber);
+
+                /** @var SessionInterface $session */
+                $session = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE, null);
+                $session->set("phone-number", $phoneNumber);
+
                 return new RedirectResponse("/verify");
             }
         } catch (TwilioException $e) {
