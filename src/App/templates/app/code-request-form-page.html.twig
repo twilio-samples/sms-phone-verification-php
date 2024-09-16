@@ -10,34 +10,54 @@
     </div>
 
     <div class="row">
+        {% if form_errors is defined and not form_errors is empty %}
+        <div class="mx-auto max-w-lg border-2 border-rose-700 rounded-md py-4 px-8 mb-3 text-center bg-rose-700 text-white font-medium drop-shadow-md">
+            There were some problems submitting the form.
+        </div>
+        {% endif %}
         <form action="/"
               method="post"
               class="bg-white mx-auto max-w-lg border-2 border-slate-100 rounded-md py-6 px-8 grid grid-cols-1 gap-3 drop-shadow-sm focus:shadow-inner pb-8">
             <div class="my-2">
-                <label for="username" class="block mb-2 font-medium text-gray-500">Username:</label>
+                <label for="username" class="{% if "username" in form_errors|keys %}error{% else %}normal{% endif %}">Username:</label>
                 <input type="text"
                        id="username"
                        name="username"
+                       placeholder="A username between 5 and 255 chars"
                        value="{% if form_data.username is defined %}{{ form_data.username }}{% endif %}"
-                       class="w-full border-slate-200 rounded-md p-2 pl-3 border-2"
+                       class="{% if "username" in form_errors|keys %}error{% else %}normal{% endif %}"
                        required>
+                {% if "username" in form_errors|keys %}
+                    <p class="text-sm mt-1 text-rose-800">The username must be between 5 and 255 chars in length.</p>
+                {% endif %}
             </div>
             <div class="my-2">
-                <label for="password" class="block mb-2 font-medium text-gray-500">Password:</label>
+                <label for="password"
+                       class="{% if "password" in form_errors|keys %}label-error{% endif %}">Password:</label>
                 <input type="password"
                        id="password"
                        name="password"
-                       class="w-full border-slate-200 rounded-md p-2 pl-3 border-2"
+                       placeholder="A password at least 10 chars in length"
+                       class="{% if "password" in form_errors|keys %}error{% else %}normal{% endif %}"
                        required>
+                {% if "password" in form_errors|keys %}
+                <p class="text-sm mt-1 text-rose-800">The password must be at least ten characters in length.</p>
+                {% endif %}
             </div>
             <div class="my-2">
-                <label for="number" class="block mb-2 font-medium text-gray-500">Phone number:</label>
-                <input type="number"
+                <label for="number"
+                       class="{% if "number" in form_errors|keys %}label-error{% endif %}">Phone number:</label>
+                <input type="tel"
                        id="number"
                        name="number"
+                       pattern="^\+[1-9]\d{1,14}$"
+                       placeholder="Your phone number in E.164 format"
                        value="{% if form_data.number is defined %}{{ form_data.number }}{% endif %}"
-                       class="w-full border-slate-200 rounded-md p-2 pl-3 border-2"
+                       class="{% if "number" in form_errors|keys %}error{% else %}normal{% endif %}"
                        required>
+                {% if "number" in form_errors|keys %}
+                <p class="text-sm mt-1 text-rose-800">The phone number must be in <a href="https://www.twilio.com/docs/glossary/what-e164" target="_blank" class="underline decoration-2 decoration-rose-800 underline-offset-2">E.164 format</a>.</p>
+                {% endif %}
             </div>
             <hr class="mt-1 drop-shadow-md mx-auto w-1/2">
             <input type="submit" name="submit" value="Request Verification Code" class="border-2 bg-indigo-600 text-white font-medium rounded-md p-3 py-2 mt-4 hover:cursor-pointer hover:bg-indigo-700">
