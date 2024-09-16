@@ -36,10 +36,10 @@ class CodeVerificationFormPageHandler implements RequestHandlerInterface
         $flashMessages = $request->getAttribute(FlashMessageMiddleware::FLASH_ATTRIBUTE, null);
 
         /** @var ?string $successMessage */
-        $successMessage = $flashMessages?->getFlash('message-success');
+        $successMessage = $flashMessages?->getFlash("message-success");
 
         if ($successMessage !== null) {
-            $data['success'] = $successMessage;
+            $data['successMessage'] = $successMessage;
         }
 
         /** @var ?string $formError */
