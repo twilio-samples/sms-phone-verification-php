@@ -1,159 +1,131 @@
-# Mezzio Skeleton and Installer
+# SMS Phone Verification with PHP
 
-[![Build Status](https://github.com/mezzio/mezzio-skeleton/actions/workflows/continuous-integration.yml/badge.svg)](https://github.com/mezzio/mezzio-skeleton/actions/workflows/continuous-integration.yml)
+This is a small web application built around the Mezzio Skeleton is a basic SMS phone verification example with PHP and Twilio.
 
-> ## 🇷🇺 Русским гражданам
->
-> Мы, участники Laminas, родились и живем в разных странах. У многих из нас есть друзья, родственники и коллеги как в России, так и в Украине. Некоторые из нас родились в России. Некоторые из нас живут в России. У некоторых бабушки и дедушки сражались с фашистами во Второй мировой войне. Здесь никто не поддерживает фашизм.
->
-> У одного из нас есть украинская родственница, которая спаслась из дома вместе с сыном. Поезд задержался из-за бомбежки на дороге впереди. У нас есть друзья, которые прячутся в бомбоубежищах. Мы с тревогой ждем весточки от них после воздушных налетов, которые беспорядочно наносят удары и попадают по больницам, школам, детским садам и домам. Мы не берем это из каких-либо СМИ. Мы наблюдаем это напрямую.
->
-> Вы доверяете нам достаточно, чтоб использовать наши программы, и мы просим вас довериться нам вновь. Мы нуждаемся в помощи. Выходите и протестуйте против этой бесполезной войны. Остановите кровопролитие. Скажите "Нет войне!"
->
-> ## 🇺🇸 To Citizens of Russia
->
-> We at Laminas come from all over the world. Many of us have friends, family and colleagues in both Russia and Ukraine. Some of us were born in Russia. Some of us currently live in Russia. Some have grandparents who fought Nazis in World War II. Nobody here supports fascism.
->
-> One team member has a Ukrainian relative who fled her home with her son. The train was delayed due to bombing on the road ahead. We have friends who are hiding in bomb shelters. We anxiously follow up on them after the air raids, which indiscriminately fire at hospitals, schools, kindergartens and houses. We're not taking this from any media. These are our actual experiences.
->
-> You trust us enough to use our software. We ask that you trust us to say the truth on this. We need your help. Go out and protest this unnecessary war. Stop the bloodshed. Say "stop the war!"
+## How Does It Work?
 
-*Begin developing PSR-15 middleware applications in seconds!*
+* It uses [Twilio Verify][twilio_verify_url] to verify phone numbers, and to add an additional layer of security.
+  This helps prevent fraudulent users from registering with your business.
+* It renders a UI to create an account on a (fictional) website, where the customer would enter their username, password, and phone number.
+* Following a successful submission, it will send the customer an SMS with a verification code.
+* The customer will be asked to enter the code into a second form to verify the code.
+* If the code is successfully verified, then the user's fictitious account is considered created.
 
-[mezzio](https://github.com/mezzio/mezzio) builds on
-[laminas-stratigility](https://github.com/laminas/laminas-stratigility) to
-provide a minimalist PSR-15 middleware framework for PHP with routing, DI
-container, optional templating, and optional error handling capabilities.
+There is a bit more to it, but these are the essential points.
 
-This installer will setup a skeleton application based on mezzio by
-choosing optional packages based on user input as demonstrated in the following
-screenshot:
+## Prerequisites
 
-![screenshot-installer](https://user-images.githubusercontent.com/1011217/90332191-55d32200-dfbb-11ea-80c0-27a07ef5691a.png)
+To use this application, you're going to need:
 
-The user selected packages are saved into `composer.json` so that everyone else
-working on the project have the same packages installed. Configuration files and
-templates are prepared for first use. The installer command is removed from
-`composer.json` after setup succeeded, and all installer related files are
-removed.
+- A Twilio account (either free or paid) with a [Twilio phone number][twilio_phone_number_setup_url] that can handle phone calls.
+  If you are new to Twilio, [create a free account][twilio_referral_url].
+- PHP 8.3
+- [Composer][composer_url] installed globally
 
-## Getting Started
+## ⚡️ Quick Start
 
-Start your new Mezzio project with composer:
+### Set up the Application
+
+Firstly, clone this repository and change into the cloned directory with the following commands:
 
 ```bash
-$ composer create-project mezzio/mezzio-skeleton <project-path>
+git clone git@github.com:settermjd/block-spam-calls-php.git
+cd block-spam-calls-php
 ```
 
-After choosing and installing the packages you want, go to the
-`<project-path>` and start PHP's built-in web server to verify installation:
+Then, install PHP's dependencies:
 
 ```bash
-$ composer serve
+composer install
 ```
 
-You can then browse to http://localhost:8080.
+#### Configure the application
 
-## Installing alternative packages
-
-There is a feature to install alternative packages: Instead of entering one of
-the selection **you can actually type the package name and version**.
-
-> ```text
->   Which template engine do you want to use?
->   [1] Plates
->   [2] Twig
->   [3] zend-view installs zend-servicemanager
->   [n] None of the above
->   Make your selection or type a composer package name and version (n): infw/pug:0.1
->   - Searching for infw/pug:0.1
->   - Adding package infw/pug (0.1)
-> ```
-
-That feature allows you to install any alternative package you want. It has its limitations though:
-
-* The alternative package must follow this format `namespace/package:1.0`. It needs the correct version.
-* Templates are not copied, but the ConfigProvider can be configured in such way that it uses the
-  default templates directly from the package itself.
-* This doesn't work for containers as the container.php file needs to be copied.
-
-## Troubleshooting
-
-If the installer fails during the ``composer create-project`` phase, please go
-through the following list before opening a new issue. Most issues we have seen
-so far can be solved by `self-update` and `clear-cache`.
-
-1. Be sure to work with the latest version of composer by running `composer self-update`.
-2. Try clearing Composer's cache by running `composer clear-cache`.
-
-If neither of the above help, you might face more serious issues:
-
-* Info about the [zlib_decode error](https://github.com/composer/composer/issues/4121).
-* Info and solutions for [composer degraded mode](https://getcomposer.org/doc/articles/troubleshooting.md#degraded-mode).
-
-## Application Development Mode Tool
-
-This skeleton comes with [laminas-development-mode](https://github.com/laminas/laminas-development-mode).
-It provides a composer script to allow you to enable and disable development mode.
-
-### To enable development mode
-
-**Note:** Do NOT run development mode on your production server!
+After that, you need to set the environment variables which the application requires.
+These are your **Twilio Account SID** and **Auth Token**.
+To do that, first copy _.env.example_ (which has the variables defined but not set) as _.env_.
 
 ```bash
-$ composer development-enable
+cp .env.example .env
 ```
 
-**Note:** Enabling development mode will also clear your configuration cache, to
-allow safely updating dependencies and ensuring any new configuration is picked
-up by your application.
+Then, you need to retrieve your Twilio credentials from the **Account Info** panel in [the Twilio Console Dashboard][twilio_console_url].
+After you've retrieved them, set the values for `TWILIO_ACCOUNT_SID` and `TWILIO_AUTH_TOKEN` in  _.env_ with the credentials that you just copied.
 
-### To disable development mode
+Following that, create a Verify V2 service.
+
+![The Verify V2 services page in the Twilio Console](./docs/images/twilio-verify-services.png)
+
+First, open [the Twilio Console][twilio_console_url] in your browser of choice and navigate to **Explore products > Verify >** [Services][twilio_console_verify_services_url].
+There, click **Create new**.
+
+![The initial form for creating a Verify V2 service in the Twilio Console](./docs/images/create-twilio-verify-service-step-one.png)
+
+In the **_Create new_** [Verify Service] form that appears, provide a **Friendly name**, enable the **SMS** verification channel, and click **Continue**.
+
+![The Enable Fraud Guard stage of creating a new Verify V2 service in the Twilio Console](./docs/images/create-twilio-verify-service-step-two.png)
+
+Following that, click Continue in the Enable Fraud Guard stage.
+
+![The settings page of a Verify V2 service in the Twilio Console](./docs/images/twilio-verify-service-settings.png)
+
+Now, you'll be on the Service settings page for your new Verify Service.
+Copy the **Service SID** and set it as the value of `TWILIO_VERIFICATION_SID` in _.env_.
+
+### Start the Application
+
+Now, start the application using the following command:
 
 ```bash
-$ composer development-disable
+composer serve
 ```
 
-### Development mode status
+### Test the Application
 
-```bash
-$ composer development-status
-```
+![The application's code request form](./docs/images/sms-phone-verification-step-one.png)
 
-## Configuration caching
+To test the application, open http://localhost:8080 in your browser of choice.
+There, enter a username, password, and your phone number and click **Request Verification Code**.
 
-By default, the skeleton will create a configuration cache in
-`data/config-cache.php`. When in development mode, the configuration cache is
-disabled, and switching in and out of development mode will remove the
-configuration cache.
+![The application's code verification form](./docs/images/sms-phone-verification-step-one.png)
 
-You may need to clear the configuration cache in production when deploying if
-you deploy to the same directory. You may do so using the following:
+You'll be redirected to the code verification form.
+Submit the verification code that you received via SMS.
+If verification was successful, you'll be redirected to the code verification form.
 
-```bash
-$ composer clear-config-cache
-```
+## Contributing
 
-You may also change the location of the configuration cache itself by editing
-the `config/config.php` file and changing the `config_cache_path` entry of the
-local `$cacheConfig` variable.
+If you want to contribute to the project, whether you have found issues with it or just want to improve it, here's how:
 
-## Skeleton Development
+- [Issues][issues_url]: ask questions and submit your feature requests, bug reports, etc
+- [Pull requests][pull_requests_url]: send your improvements
 
-This section applies only if you cloned this repo with `git clone`, not when you
-installed mezzio with `composer create-project ...`.
+## Resources
 
-If you want to run tests against the installer, you need to clone this repo and
-setup all dependencies with composer.  Make sure you **prevent composer running
-scripts** with `--no-scripts`, otherwise it will remove the installer and all
-tests.
+Find out more about the project on [CodeExchange][code-exchange-url].
 
-```bash
-$ composer update --no-scripts
-$ composer test
-```
+## Did You Find The Project Useful?
 
-Please note that the installer tests remove installed config files and templates
-before and after running the tests.
+If the project was useful and you want to say thank you and/or support its active development, here's how:
 
-Before contributing read [the contributing guide](https://github.com/mezzio/.github/blob/master/CONTRIBUTING.md).
+- Add a GitHub Star to the project
+- Write an interesting article about the project wherever you blog
+
+## License
+
+[MIT](./LICENSE)
+
+## Disclaimer
+
+No warranty expressed or implied. Software is as is.
+
+[code-exchange-url]: https://www.twilio.com/code-exchange/sms-phone-verification
+[composer_url]: https://getcomposer.org
+[issues_url]: https://github.com/settermjd/sms-phone-verification-php/issues
+[pull_requests_url]: https://github.com/settermjd/sms-phone-verification-php/pulls
+[mezzio-url]: https://docs.mezzio.dev/mezzio/
+[twilio]: https://www.twilio.com
+[twilio_console_url]: https://www.twilio.com/console
+[twilio_console_verify_services_url]: https://console.twilio.com/us1/develop/verify/services
+[twilio_verify_url]: https://www.twilio.com/en-us/user-authentication-identity/verify
+[mit_license_url]: http://www.opensource.org/licenses/mit-license.html
