@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>{% block title %}{% endblock %} — SMS Phone Verification</title>
+    <link rel="shortcut icon" href="https://getlaminas.org/images/favicon/favicon.ico" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    {% block stylesheets %}{% endblock %}
+</head>
+<body class="bg-slate-50">
+    <div>
+        <main class="my-12 mt-20">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <footer class="mt-1 text-gray-400 text-center mx-2 sticky">
+        <div>
+            <hr class="drop-shadow-sm" />
+            {% block footer %}
+                <p class="mt-2 mx-2">
+                    &copy; {{ "now"|date("Y") }} Matthew Setter.
+                </p>
+            {% endblock %}
+        </div>
+    </footer>
+    {% block javascript %}{% endblock %}
+</body>
+</html>
