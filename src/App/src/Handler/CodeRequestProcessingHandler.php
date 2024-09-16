@@ -17,6 +17,7 @@ use Mezzio\Flash\FlashMessagesInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Twilio\Exceptions\TwilioException;
 use Twilio\Rest\Client;
 
 readonly final class CodeRequestProcessingHandler implements RequestHandlerInterface
@@ -32,7 +33,7 @@ readonly final class CodeRequestProcessingHandler implements RequestHandlerInter
             ->attach(new StripTags());
         $username->getValidatorChain()
             ->attach(new NotEmpty())
-            ->attach(new StringLength(['max' => 255]));
+            ->attach(new StringLength(["min" => 5, "max" => 255]));
 
         $password = new Input("password");
         $password->setRequired(true);
@@ -65,19 +66,27 @@ readonly final class CodeRequestProcessingHandler implements RequestHandlerInter
         $flashMessages = $request->getAttribute(FlashMessageMiddleware::FLASH_ATTRIBUTE, null);
 
         $this->inputFilter->setData($request->getParsedBody() ?? []);
-        if ($this->inputFilter->isValid()) {
-            $phoneNumber = (string) $this->inputFilter->getValue("number");
-            $this->client
-                ->verify
-                ->v2
-                ->services($this->verificationSid)
-                ->verifications
-                ->create($phoneNumber, "sms");
-            $flashMessages?->flash("phone-number", $phoneNumber);
-            return new RedirectResponse("/verify");
+        try {
+            if ($this->inputFilter->isValid()) {
+                $phoneNumber = (string) $this->inputFilter->getValue("number");
+                $this->client
+                    ->verify
+                    ->v2
+                    ->services($this->verificationSid)
+                    ->verifications
+                    ->create($phoneNumber, "sms");
+                $flashMessages?->flash("phone-number", $phoneNumber);
+                return new RedirectResponse("/verify");
+            }
+        } catch (TwilioException $e) {
+            $flashMessages?->flash("form-errors", [
+                'verification' => $e->getMessage(),
+            ]);
+            $flashMessages?->flash("form-data", $this->inputFilter->getValues());
+            return new RedirectResponse("/");
         }
 
-        $flashMessages?->flash("form-error", "The form contains errors");
+        $flashMessages?->flash("form-errors", $this->inputFilter->getMessages());
         $flashMessages?->flash("form-data", $this->inputFilter->getValues());
 
         return new RedirectResponse("/");

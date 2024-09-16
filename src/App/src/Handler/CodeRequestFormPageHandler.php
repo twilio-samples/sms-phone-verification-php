@@ -27,8 +27,8 @@ readonly final class CodeRequestFormPageHandler implements RequestHandlerInterfa
         $formData = $flashMessages?->getFlash('form-data') ?? [];
         return new HtmlResponse(
             $this->template->render('app::code-request-form-page', [
-                'error'     => $flashMessages?->getFlash('form-error') ?? "",
-                'form_data' => $formData,
+                'form_errors' => $flashMessages?->getFlash('form-errors') ?? "",
+                'form_data'   => $formData,
             ])
         );
     }

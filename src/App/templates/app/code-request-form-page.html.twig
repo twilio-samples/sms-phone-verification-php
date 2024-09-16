@@ -12,7 +12,11 @@
     <div class="row">
         {% if form_errors is defined and not form_errors is empty %}
         <div class="mx-auto max-w-lg border-2 border-rose-700 rounded-md py-4 px-8 mb-3 text-center bg-rose-700 text-white font-medium drop-shadow-md">
-            There were some problems submitting the form.
+            {% if "verification" in form_errors|keys %}
+                A verification code could not be submitted. Reason: {{ form_errors.verification }}.
+            {% else %}
+                There were some problems submitting the form.
+            {% endif %}
         </div>
         {% endif %}
         <form action="/"
