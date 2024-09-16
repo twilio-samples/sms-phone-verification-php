@@ -15,7 +15,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class CodeVerificationFormPageHandler implements RequestHandlerInterface
+readonly final class CodeVerificationFormPageHandler implements RequestHandlerInterface
 {
     public function __construct(private TemplateRendererInterface $template)
     {
