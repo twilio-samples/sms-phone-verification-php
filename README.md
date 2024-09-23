@@ -17,10 +17,10 @@ There is a bit more to it, but these are the essential points.
 
 To use this application, you're going to need:
 
-- A Twilio account (either free or paid) with a [Twilio phone number][twilio_phone_number_setup_url] that can handle phone calls.
+* A Twilio account (either free or paid) with a [Twilio phone number][twilio_phone_number_setup_url] that can handle phone calls.
   If you are new to Twilio, [create a free account][twilio_referral_url].
-- PHP 8.3
-- [Composer][composer_url] installed globally
+* PHP 8.3
+* [Composer][composer_url] installed globally
 
 ## ⚡️ Quick Start
 
@@ -84,7 +84,9 @@ composer serve
 
 ![The application's code request form](./docs/images/sms-phone-verification-step-one.png)
 
+<!-- markdownlint-disable MD034 -->
 To test the application, open http://localhost:8080 in your browser of choice.
+<!-- markdownlint-enable MD034 -->
 There, enter a username, password, and your phone number and click **Request Verification Code**.
 
 ![The application's code verification form](./docs/images/sms-phone-verification-step-one.png)
@@ -97,8 +99,8 @@ If verification was successful, you'll be redirected to the code verification fo
 
 If you want to contribute to the project, whether you have found issues with it or just want to improve it, here's how:
 
-- [Issues][issues_url]: ask questions and submit your feature requests, bug reports, etc
-- [Pull requests][pull_requests_url]: send your improvements
+* [Issues][issues_url]: ask questions and submit your feature requests, bug reports, etc
+* [Pull requests][pull_requests_url]: send your improvements
 
 ## Resources
 
@@ -108,8 +110,8 @@ Find out more about the project on [CodeExchange][code-exchange-url].
 
 If the project was useful and you want to say thank you and/or support its active development, here's how:
 
-- Add a GitHub Star to the project
-- Write an interesting article about the project wherever you blog
+* Add a GitHub Star to the project
+* Write an interesting article about the project wherever you blog
 
 ## License
 
@@ -123,11 +125,8 @@ No warranty expressed or implied. Software is as is.
 [composer_url]: https://getcomposer.org
 [issues_url]: https://github.com/settermjd/sms-phone-verification-php/issues
 [pull_requests_url]: https://github.com/settermjd/sms-phone-verification-php/pulls
-[mezzio-url]: https://docs.mezzio.dev/mezzio/
-[twilio]: https://www.twilio.com
 [twilio_console_url]: https://www.twilio.com/console
 [twilio_console_verify_services_url]: https://console.twilio.com/us1/develop/verify/services
 [twilio_verify_url]: https://www.twilio.com/en-us/user-authentication-identity/verify
-[mit_license_url]: http://www.opensource.org/licenses/mit-license.html
 [twilio_phone_number_setup_url]: https://www.twilio.com/docs/phone-numbers
 [twilio_referral_url]: https://www.twilio.com/try-twilio
