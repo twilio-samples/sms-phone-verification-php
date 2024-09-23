@@ -93,7 +93,8 @@
         "mezzio": "laminas --ansi",
         "check": [
             "@cs-check",
-            "@test"
+            "@static-analysis",
+            "@test",
             "@markdown-lint"
         ],
         "clear-config-cache": "php bin/clear-config-cache.php",
