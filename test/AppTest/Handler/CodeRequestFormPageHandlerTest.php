@@ -16,8 +16,7 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class CodeRequestFormPageHandlerTest extends TestCase
 {
-    /** @var ContainerInterface&MockObject */
-    protected $container;
+    protected ContainerInterface&MockObject $container;
 
     protected function setUp(): void
     {
