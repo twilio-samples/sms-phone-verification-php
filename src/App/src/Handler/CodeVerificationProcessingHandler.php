@@ -43,8 +43,14 @@ readonly final class CodeVerificationProcessingHandler implements RequestHandler
     {
         /** @var SessionInterface $session */
         $session = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE, null);
-        if (! $session instanceof SessionInterface || $session->get("phone-number", null) === null) {
+        if (! $session instanceof SessionInterface) {
             // The phone number needs to be set in session for this handler to work
+            return new RedirectResponse("/");
+        }
+
+        /** @var ?string $phoneNumber */
+        $phoneNumber = $session->get("phone-number", null) ?? "";
+        if ($phoneNumber === null || $phoneNumber === "") {
             return new RedirectResponse("/");
         }
 
@@ -56,9 +62,6 @@ readonly final class CodeVerificationProcessingHandler implements RequestHandler
             $flashMessages?->flash("form-error", "Verification check failed: Invalid code.");
             return new RedirectResponse("/verify");
         }
-
-        /** @var string $phoneNumber */
-        $phoneNumber = $session->get("phone-number", null) ?? "";
 
         try {
             $verificationCheck = $this->client
