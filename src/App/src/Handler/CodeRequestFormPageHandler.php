@@ -7,8 +7,6 @@ namespace App\Handler;
 use Laminas\Diactoros\Response\HtmlResponse;
 use Mezzio\Flash\FlashMessageMiddleware;
 use Mezzio\Flash\FlashMessagesInterface;
-use Mezzio\Session\SessionInterface;
-use Mezzio\Session\SessionMiddleware;
 use Mezzio\Template\TemplateRendererInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
