@@ -67,7 +67,9 @@ readonly final class CodeRequestProcessingHandler implements RequestHandlerInter
         /** @var ?FlashMessagesInterface $flashMessages */
         $flashMessages = $request->getAttribute(FlashMessageMiddleware::FLASH_ATTRIBUTE, null);
 
-        $this->inputFilter->setData($request->getParsedBody() ?? []);
+        /** @var array $requestData */
+        $requestData = $request->getParsedBody() ?? [];
+        $this->inputFilter->setData($requestData);
         try {
             if ($this->inputFilter->isValid()) {
                 $phoneNumber = (string) $this->inputFilter->getValue("number");
