@@ -1,0 +1,87 @@
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 class="card-title">Create Account</h1>
+
+    {% if form_errors is defined and form_errors is not empty %}
+    <div class="alert alert-error">
+        {% if form_errors.verification is defined %}
+            {{ form_errors.verification }}
+        {% else %}
+            Please fix the errors below.
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <form method="POST" action="/register" id="register-form">
+        <div class="form-group">
+            <label for="username" class="form-label required">Username</label>
+            <input type="text"
+                   id="username"
+                   name="username"
+                   class="form-input{% if form_errors.username is defined %} error{% endif %}"
+                   value="{% if form_data.username is defined %}{{ form_data.username }}{% endif %}"
+                   required>
+            {% if form_errors.username is defined %}
+            <p class="form-error">Username must be between 5 and 255 characters</p>
+            {% else %}
+            <p class="form-help">Between 5 and 255 characters</p>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="password" class="form-label required">Password</label>
+            <input type="password"
+                   id="password"
+                   name="password"
+                   class="form-input{% if form_errors.password is defined %} error{% endif %}"
+                   required>
+            {% if form_errors.password is defined %}
+            <p class="form-error">Password must be at least 10 characters</p>
+            {% else %}
+            <p class="form-help">At least 10 characters</p>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="number" class="form-label required">Phone Number</label>
+            <input type="tel"
+                   id="number"
+                   name="number"
+                   class="form-input{% if form_errors.number is defined %} error{% endif %}"
+                   value="{% if form_data.number is defined %}{{ form_data.number }}{% endif %}"
+                   required>
+            {% if form_errors.number is defined %}
+            <p class="form-error">Please enter a valid phone number</p>
+            {% else %}
+            <p class="form-help">Select your country and enter your phone number</p>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">Register</button>
+    </form>
+
+    <p class="text-center mt-60">
+        Already have an account? <a href="/" class="text-link">Sign In</a>
+    </p>
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+    const input = document.querySelector("#number");
+    const iti = intlTelInput(input, {
+        initialCountry: "us",
+        preferredCountries: ["us", "gb", "ca", "au"],
+        separateDialCode: true,
+        utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@24.0.0/build/js/utils.js"
+    });
+
+    document.getElementById('register-form').addEventListener('submit', function() {
+        input.value = iti.getNumber();
+    });
+</script>
+{% endblock %}

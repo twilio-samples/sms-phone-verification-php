@@ -1,31 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>{% block title %}{% endblock %} — SMS Phone Verification</title>
-    <link rel="shortcut icon" href="https://getlaminas.org/images/favicon/favicon.ico" />
-    <link rel="stylesheet" href="/css/styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %} | Twilio Verify</title>
+    <link rel="stylesheet" href="https://assets.twilio.com/public_assets/paste-fonts/1.5.2/fonts.css">
+    <link rel="stylesheet" href="/css/paste.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@24.0.0/build/css/intlTelInput.css">
     {% block stylesheets %}{% endblock %}
 </head>
-<body class="bg-slate-50">
-    <div>
-        <main class="my-12 mt-20">
-            {% block content %}{% endblock %}
-        </main>
-    </div>
-
-    <footer class="mt-1 text-gray-400 text-center mx-2 sticky">
-        <div>
-            <hr class="drop-shadow-sm" />
-            {% block footer %}
-                <p class="mt-2 mx-2">
-                    &copy; {{ "now"|date("Y") }} Matthew Setter.
-                </p>
-            {% endblock %}
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">Twilio Verify</a>
         </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>Powered by Twilio Verify API</p>
     </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@24.0.0/build/js/intlTelInput.min.js"></script>
     {% block javascript %}{% endblock %}
 </body>
 </html>

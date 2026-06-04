@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Handler;
 
+use App\Repository\UserRepository;
 use Laminas\Diactoros\Response\RedirectResponse;
 use Laminas\Filter\StringTrim;
 use Laminas\Filter\StripTags;
@@ -19,14 +20,12 @@ use Mezzio\Session\SessionMiddleware;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Twilio\Exceptions\TwilioException;
-use Twilio\Rest\Client;
 
-readonly final class CodeRequestProcessingHandler implements RequestHandlerInterface
+final class RegisterProcessHandler implements RequestHandlerInterface
 {
     private InputFilter $inputFilter;
 
-    public function __construct(private Client $client, private string $verificationSid)
+    public function __construct(private readonly UserRepository $userRepository)
     {
         $username = new Input("username");
         $username->setRequired(true);
@@ -65,36 +64,33 @@ readonly final class CodeRequestProcessingHandler implements RequestHandlerInter
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         /** @var ?FlashMessagesInterface $flashMessages */
-        $flashMessages = $request->getAttribute(FlashMessageMiddleware::FLASH_ATTRIBUTE, null);
+        $flashMessages = $request->getAttribute(FlashMessageMiddleware::FLASH_ATTRIBUTE);
 
         $this->inputFilter->setData($request->getParsedBody() ?? []);
-        try {
-            if ($this->inputFilter->isValid()) {
-                $phoneNumber = (string) $this->inputFilter->getValue("number");
-                $this->client
-                    ->verify
-                    ->v2
-                    ->services($this->verificationSid)
-                    ->verifications
-                    ->create($phoneNumber, "sms");
 
-                /** @var SessionInterface $session */
-                $session = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE, null);
-                $session->set("phone-number", $phoneNumber);
-
-                return new RedirectResponse("/verify");
-            }
-        } catch (TwilioException $e) {
-            $flashMessages?->flash("form-errors", [
-                'verification' => $e->getMessage(),
-            ]);
-            $flashMessages?->flash("form-data", $this->inputFilter->getValues());
-            return new RedirectResponse("/");
+        if (!$this->inputFilter->isValid()) {
+            $flashMessages?->flash('form-errors', $this->inputFilter->getMessages());
+            $flashMessages?->flash('form-data', $this->inputFilter->getValues());
+            return new RedirectResponse('/register');
         }
 
-        $flashMessages?->flash("form-errors", $this->inputFilter->getMessages());
-        $flashMessages?->flash("form-data", $this->inputFilter->getValues());
+        $username = (string) $this->inputFilter->getValue('username');
+        $password = (string) $this->inputFilter->getValue('password');
+        $phoneNumber = (string) $this->inputFilter->getValue('number');
 
-        return new RedirectResponse("/");
+        $existingUser = $this->userRepository->findByUsername($username);
+        if ($existingUser !== null) {
+            $flashMessages?->flash('form-errors', ['username' => ['Username already exists']]);
+            $flashMessages?->flash('form-data', $this->inputFilter->getValues());
+            return new RedirectResponse('/register');
+        }
+
+        $userId = $this->userRepository->create($username, $password, $phoneNumber);
+
+        /** @var SessionInterface $session */
+        $session = $request->getAttribute(SessionMiddleware::SESSION_ATTRIBUTE);
+        $session->set('user_id', $userId);
+
+        return new RedirectResponse('/verify');
     }
 }

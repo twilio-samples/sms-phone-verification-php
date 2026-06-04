@@ -1,0 +1,18 @@
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 class="card-title">Welcome{% if user is defined %}, {{ user.username }}{% endif %}!</h1>
+
+    <div class="success-box">
+        <p class="success-box-title">Phone Verified</p>
+        <p class="success-box-text">Your phone number has been successfully verified.</p>
+    </div>
+
+    <p class="text-center">
+        <a href="/logout" class="text-link">Sign out</a>
+    </p>
+</div>
+{% endblock %}
