@@ -1,0 +1,49 @@
+{% extends '@layout/default.html.twig' %}
+
+{% block title %}Verify Phone{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h1 class="card-title">Verify Your Phone</h1>
+
+    <div class="callout">
+        <p class="callout-title">Phone Verification Required</p>
+        <p class="callout-text">We need to verify your phone number before you can continue.</p>
+    </div>
+
+    {% if message is defined and message %}
+    <div class="alert alert-success">{{ message }}</div>
+    {% endif %}
+
+    {% if error is defined and error %}
+    <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/verify/send">
+        <button type="submit" class="btn btn-secondary btn-full">Send Verification Code</button>
+    </form>
+
+    <div class="divider">
+        <span>or enter code</span>
+    </div>
+
+    <form method="POST" action="/verify">
+        <div class="form-group">
+            <label for="code" class="form-label required">Verification Code</label>
+            <input type="text"
+                   id="code"
+                   name="code"
+                   class="form-input"
+                   placeholder="123456"
+                   maxlength="6"
+                   required>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">Verify Code</button>
+    </form>
+
+    <p class="text-center mt-60">
+        <a href="/logout" class="text-link">Sign out</a>
+    </p>
+</div>
+{% endblock %}

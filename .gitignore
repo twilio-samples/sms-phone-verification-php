@@ -5,3 +5,5 @@
 /coveralls-upload.json
 /phpunit.xml
 /vendor/
+.env
+data/database.sqlite
